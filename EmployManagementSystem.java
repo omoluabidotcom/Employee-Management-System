@@ -2,7 +2,7 @@
 
 import java.util.*;
 import java.io.*;
-
+import java.nio.file.*;
 
 /*************************** MENU OF EMS ****************************/
 
@@ -24,9 +24,8 @@ class MainMenu
     System.out.println("Press 2 : To See an Employee Details ");
     System.out.println("Press 3 : To Remove an Employee");
     System.out.println("Press 4 : To Update Employee Details");
-    System.out.println("Press 5 : To Exit the EMS Portal");
+    System.out.println("Press 5 : To View all Employee Details");
     System.out.println("Press 6 : To Exit the EMS Portal");
-
   }
 }
 
@@ -59,8 +58,6 @@ class Employee_Add
                 System.out.print("\nPress Enter to Continue...");
                 sc.nextLine();
             }
-
-            // sc.close();
         }
         catch(Exception e){System.out.println(e);}
     }
@@ -94,8 +91,6 @@ class EmployDetail
         employ_contact=sc.nextLine();
         System.out.print("Enter Employee's Salary ------: ");
         employ_salary=sc.nextLine();
-
-        // sc.close();
     }
 }
 
@@ -112,8 +107,6 @@ class Employee_Show
      {
        System.out.println(sc.nextLine());
      }
-
-    //  sc.close();
    }
 }
 
@@ -152,11 +145,39 @@ class Employee_Update
        {
          fileContext =fileContext+"\n"+sc.nextLine();
        }
-   FileWriter myWriter = new FileWriter("file"+s+".txt");
+   FileWriter myWriter = new FileWriter("C:\\Users\\HP\\Desktop\\Employee-Management-System-master\\Text\\file"+s+".txt");
    fileContext = fileContext.replaceAll(o,n);
    myWriter.write(fileContext);
    myWriter.close();
-  //  sc.close();
+  }
+}
+
+class Employee_All
+{
+
+  public void getAllEmployee() {
+
+    Path dir = Paths.get("C:\\Users\\HP\\Desktop\\Employee-Management-System-master\\Text");
+
+    try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
+      
+      for (Path file: stream) {
+  
+          BufferedReader reader = null;
+  
+          reader = new BufferedReader(new FileReader(String.valueOf(file)));
+          String u;
+  
+          while ((u = reader.readLine()) != null) {
+  
+              System.out.println(u);
+          }
+          System.out.println("\n");
+      }
+      } catch (IOException e) {
+  
+      System.out.println(e);
+    }
   }
 }
 
@@ -185,7 +206,8 @@ class EmployManagementSystem
     System.out.print("\033[H\033[2J");
 
     Scanner sc=new Scanner(System.in);
-    Employee_Show epv =new Employee_Show();
+    Employee_Show epv = new Employee_Show();
+    Employee_All epa = new Employee_All();
 
     int i=0;
 
@@ -194,7 +216,7 @@ class EmployManagementSystem
     obj1.menu();
 
     /*** Initialising loop for Menu Choices ***/
-    while(i<6)
+    while(i<7)
     {
 
       System.out.print("\nPlease Enter choice :");
@@ -277,15 +299,26 @@ class EmployManagementSystem
               System.out.println(e);
             }
         }
-        case 5:
+        case 5: 
+
+            System.out.println("All Employee Details\n");
+            try {
+              
+              epa.getAllEmployee();              
+            } catch (Exception e) {System.out.println(e);}
+
+            System.out.print("\nPress Enter to Continue...");
+            sc.nextLine();
+            System.out.print("\033[H\033[2J");
+            obj1.menu();
+            break;    
+        case 6:
         {
           CodeExit obj = new CodeExit();
           obj.out();
         }
       }
     }
-
-    // sc.close();
   }
 }
 
